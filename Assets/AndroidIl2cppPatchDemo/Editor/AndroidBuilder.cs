@@ -11,8 +11,8 @@ public class AndroidBuilder : MonoBehaviour {
 
     //-----------------------------------------  config ---------------------------------
     //set SDK/NDK/JDK via Unity Menu Path: Edit -> Preferences... -> External Tools -> Android
-    public static readonly string ANDROID_BUILD_TOOLS_VERSION = "26.0.2";
-    public static readonly string ANDROID_PLATFORM = "android-23";
+    public static readonly string ANDROID_BUILD_TOOLS_VERSION = "29.0.2";
+    public static readonly string ANDROID_PLATFORM = "android-29";
 
     //-----------------------------------------------------------------------------------
     public static readonly string PROJECT_DIR = Application.dataPath.Substring(0, Application.dataPath.Length - 6);
