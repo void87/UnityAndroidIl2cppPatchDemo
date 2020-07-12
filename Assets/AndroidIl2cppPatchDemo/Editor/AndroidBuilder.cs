@@ -372,6 +372,7 @@ import io.github.noodle1983.Boostrap;");
         string manifestXmlPath = MANIFEST_XML_PATH;
         string content = File.ReadAllText(manifestXmlPath);
         File.WriteAllText(manifestXmlPath, content.Replace(@"|density", ""));
+        File.WriteAllText(manifestXmlPath, content.Replace(@"<supports-screens", " <uses-sdk android:minSdkVersion=\"16\" android:targetSdkVersion=\"29\"></uses-sdk>\n <supports-screens"));
         return true;
     }
 
