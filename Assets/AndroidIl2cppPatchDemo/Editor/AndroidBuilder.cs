@@ -200,8 +200,11 @@ import io.github.noodle1983.Boostrap;");
     [MenuItem("AndroidBuilder/Step 3: Generate Bin Patches", false, 103)]
     public static bool GenerateBinPatches()
     {
+        // e.g. D:/Projects/UnityProjects/UnityAndroidIl2cppPatchDemo//AndroidGradleProject_v1.1/UnityAndroidIl2cppPatchDemo/src/main/assets/bin/Data/
         string assetBinDataPath = EXPORTED_ASSETS_PATH + "/bin/Data/";
+        // e.g. D:/Projects/UnityProjects/UnityAndroidIl2cppPatchDemo//AllAndroidPatchFiles/
         string patchTopPath = PROJECT_DIR + "/AllAndroidPatchFiles/";
+        // e.g. D:/Projects/UnityProjects/UnityAndroidIl2cppPatchDemo//AllAndroidPatchFiles//assets_bin_Data/
         string assertBinDataPatchPath = patchTopPath + "/assets_bin_Data/";
      
         if (Directory.Exists(patchTopPath)) { FileUtil.DeleteFileOrDirectory(patchTopPath); }
@@ -220,14 +223,20 @@ import io.github.noodle1983.Boostrap;");
         for (int i = 0; i < soPatchFile.Length; i++)
         {
             string[] specialPaths = soPatchFile[i];
+            // e.g. /jniLibs/armeabi-v7a/libil2cpp.so
             string projectRelativePath = specialPaths[0];
+            // e.g. libil2cpp.so.new
             string pathInZipFile = specialPaths[1];
+            // e.g. lib_armeabi-v7a_libil2cpp.so.zip
             string zipFileName = specialPaths[2];
 
+            // e.g. D:/Projects/UnityProjects/UnityAndroidIl2cppPatchDemo//AndroidGradleProject_v1.1/UnityAndroidIl2cppPatchDemo/src/main//jniLibs/armeabi-v7a/libil2cpp.so
             string projectFullPath = BUILD_SCRIPTS_PATH + projectRelativePath;
+            // 将补丁版的 libil2cpp.so 重命名 libil2cpp.so.new 并打包到 为 lib_armeabi-v7a_libil2cpp.so.zip
             ZipHelper.ZipFile(projectFullPath, pathInZipFile, patchTopPath + zipFileName, 9);
         }
 
+        // e.g. 将补丁版的 src/main/assets/bin/Data/ 里的文件 拷贝到 assets_bin_Data 并增加.bin后缀, 文件夹以"_"连接
         string[] allAssetsBinDataFiles = Directory.GetFiles(assetBinDataPath, "*", SearchOption.AllDirectories);
         StringBuilder allZipCmds = new StringBuilder();
         allZipCmds.AppendFormat("if not exist \"{0}\" (MD \"{0}\") \n", PROJECT_DIR + "/AllAndroidPatchFiles/");
@@ -247,6 +256,7 @@ import io.github.noodle1983.Boostrap;");
 
         if (allZipCmds.Length > 0)
         {
+            // 运行批处理
             string zipPatchesFile = BUILD_SCRIPTS_PATH + "/" + "zip_patches.bat";
             File.WriteAllText(zipPatchesFile, allZipCmds.ToString());
             if (!Exec(zipPatchesFile, zipPatchesFile))
